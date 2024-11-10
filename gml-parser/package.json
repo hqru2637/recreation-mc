@@ -1,0 +1,18 @@
+{
+  "name": "gis",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "fast-xml-parser": "^4.5.0",
+    "jpgis-parser": "^1.0.12"
+  },
+  "scripts": {
+    "test": "bun run test.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

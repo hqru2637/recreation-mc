@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "name": "Repository",
+      "path": ".."
+    },
+    {
+      "name": "Parser",
+      "path": "../gml-parser"
+    }
+  ]
+}
