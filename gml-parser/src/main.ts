@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 
 export enum DataType {
+  /** Represents 3d model for buildings */
   Building,
+  /** Represents terrain model */
   DEM,
 }
 
@@ -14,6 +16,4 @@ export class Main {
   ) {
     this.data = readFileSync(path);
   }
-
-
 }

@@ -7,7 +7,8 @@
     "jpgis-parser": "^1.0.12"
   },
   "scripts": {
-    "test": "bun run test.ts"
+    "test": "bun run test.ts",
+    "build": "bun build src/main.ts --compile --outfile build/parser"
   },
   "devDependencies": {
     "@types/bun": "latest"

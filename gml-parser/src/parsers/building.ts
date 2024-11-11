@@ -1,7 +1,3 @@
 export class BuildingParser {
-  
-  
-  constructor() {
-    
-  }
+  constructor() {}
 }

@@ -1,13 +1,22 @@
 import { readFileSync, writeFileSync, readdirSync, copyFileSync, statSync } from 'fs';
 import path from 'node:path';
 import { XMLParser } from 'fast-xml-parser';
+import Vec3 from './src/utils/Vec3';
+
+/*
+36.551441
+36.551241
+0.0002=10blocks
+0.00002=1block
+*/
+
 
 const TARGET_NUMBER = 543967;
 const TARGET_INDEXES = [
   70, 71, 72, 73, 74,
   60, 61, 62, 63, 64,
           52, 53, 54,
-]
+];
 
 let buildingCount = 0;
 
@@ -45,12 +54,6 @@ function processMap() {
   writeFileSync('./output/buildings.json', JSON.stringify(maps, null, 2));
 }
 
-interface Vec3 {
-  x: number;
-  y: number;
-  z: number;
-}
-
 interface Building {
   polygons: Vec3[];
   min?: Vec3;
@@ -73,7 +76,7 @@ function parse(data: Buffer): ParseResult {
   const parsed = parser.parse(data);
   const cityModel = parsed['core:CityModel'];
   const objects: any[] = cityModel['core:cityObjectMember'];
-  let average: Vec3 = { x: 0, y: 0, z: 0 };
+  let average: Vec3 = new Vec3(0, 0, 0);
 
   const buildings: Building[] = objects.map((o: any) => {
     const polygonValues: number[] = o['bldg:Building']['bldg:lod0RoofEdge']['gml:MultiSurface']['gml:surfaceMember']['gml:Polygon']['gml:exterior']['gml:LinearRing']['gml:posList']
@@ -85,15 +88,11 @@ function parse(data: Buffer): ParseResult {
 
     let i = 0;
     while (i < polygonValues.length) {
-      const pos = {
-        x: polygonValues[i],
-        y: polygonValues[i + 1],
-        z: polygonValues[i + 2],
-      }
-      average = add(average, pos); 
+      const pos = new Vec3(polygonValues[i], polygonValues[i + 1], polygonValues[i + 2]);
+      average = average.add(pos);
       polygons.push(pos);
-      max ??= { ...pos };
-      min ??= { ...pos };
+      max ??= Vec3.from(pos);
+      min ??= Vec3.from(pos);
       max.x = Math.max(max.x, pos.x);
       max.y = Math.max(max.y, pos.y);
       max.z = Math.max(max.z, pos.z);
@@ -121,21 +120,5 @@ function parse(data: Buffer): ParseResult {
   // 36.554949 139.910330
   // 36.551343 139.915754
 
-  return { buildings, average: devide(average, buildings.length) }
-}
-
-function add(v1: Vec3, v2: Vec3) {
-  return {
-    x: v1.x + v2.x,
-    y: v1.y + v2.y,
-    z: v1.z + v2.z
-  }
-}
-
-function devide(v: Vec3, n: number) {
-  return {
-    x: v.x / n,
-    y: v.y / n,
-    z: v.z / n
-  }
+  return { buildings, average: average.divide(buildings.length) }
 }

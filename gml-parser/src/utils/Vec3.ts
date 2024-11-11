@@ -13,9 +13,9 @@ interface IVec3 {
 export default class Vec3 implements IVec3 {
   public static readonly Zero = new Vec3(0, 0, 0);
 
-  readonly x: number;
-  readonly y: number;
-  readonly z: number;
+  x: number;
+  y: number;
+  z: number;
 
   constructor(x: number, y: number, z: number);
   constructor(x: Vec3);
