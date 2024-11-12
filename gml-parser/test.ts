@@ -3,14 +3,6 @@ import path from 'node:path';
 import { XMLParser } from 'fast-xml-parser';
 import Vec3 from './src/utils/Vec3';
 
-/*
-36.551441
-36.551241
-0.0002=10blocks
-0.00002=1block
-*/
-
-
 const TARGET_NUMBER = 543967;
 const TARGET_INDEXES = [
   70, 71, 72, 73, 74,
@@ -91,8 +83,8 @@ function parse(data: Buffer): ParseResult {
       const pos = new Vec3(polygonValues[i], polygonValues[i + 1], polygonValues[i + 2]);
       average = average.add(pos);
       polygons.push(pos);
-      max ??= Vec3.from(pos);
-      min ??= Vec3.from(pos);
+      max ??= pos.copy();
+      min ??= pos.copy();
       max.x = Math.max(max.x, pos.x);
       max.y = Math.max(max.y, pos.y);
       max.z = Math.max(max.z, pos.z);
@@ -121,4 +113,16 @@ function parse(data: Buffer): ParseResult {
   // 36.551343 139.915754
 
   return { buildings, average: average.divide(buildings.length) }
+}
+
+
+function toMCLocation(vec: Vec3, origin: Vec3) {
+  /*
+  36.551441
+  36.551241
+  0.0002=10blocks
+  0.00002=1block
+  */
+  const scale = 1 / 0.00002;
+  return vec.subtract(origin).multiply(scale);
 }

@@ -1,3 +1,4 @@
+import { inspect } from 'bun';
 /**
  * https://github.com/Bedrock-OSS/bedrock-boost/blob/main/src/Vec3.ts
  */
@@ -587,5 +588,9 @@ export default class Vec3 implements IVec3 {
   toString(format: 'long'|'short' = 'long', separator: string = ', '): string {
     const result = `${this.x + separator + this.y + separator + this.z}`;
     return format === 'long' ? `Vec3(${result})` : result;
+  }
+
+  [inspect.custom]() {
+    return { x: this.x, y: this.y, z: this.z }
   }
 }
